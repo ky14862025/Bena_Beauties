@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bena Beauties – Shine Boldly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --deep: #111111;
+    --card: #161616;
+    --pink-hot: #FF1F7A;
+    --pink-mid: #FF5FA0;
+    --pink-soft: #FFB3CF;
+    --pink-pale: #FFF0F5;
+    --white: #FFFFFF;
+    --gold: #C9A96E;
+    --text-muted: #888888;
+    --border: rgba(255,31,122,0.15);
+    --glow: rgba(255,31,122,0.35);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  .cursor {
+    position: fixed; width: 12px; height: 12px;
+    background: var(--pink-hot); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform .1s, width .2s, height .2s, background .2s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    position: fixed; width: 36px; height: 36px;
+    border: 1.5px solid var(--pink-hot); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: transform .15s ease, width .3s, height .3s, opacity .3s;
+    opacity: .6;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--pink-hot); border-radius: 2px; }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 3rem;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    transition: padding .3s;
+  }
+  nav.scrolled { padding: .7rem 3rem; }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.7rem; font-weight: 700; letter-spacing: .08em;
+    color: var(--white); text-decoration: none;
+  }
+  .nav-logo span { color: var(--pink-hot); }
+
+  .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+  .nav-links a {
+    color: rgba(255,255,255,0.75); text-decoration: none;
+    font-size: .85rem; letter-spacing: .1em; text-transform: uppercase;
+    font-weight: 500; transition: color .2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -3px; left: 0;
+    width: 0; height: 1px; background: var(--pink-hot);
+    transition: width .3s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-actions { display: flex; align-items: center; gap: 1.2rem; }
+  .nav-icon {
+    background: none; border: none; color: var(--white);
+    cursor: none; font-size: 1.1rem; padding: .4rem;
+    position: relative; transition: color .2s;
+  }
+  .nav-icon:hover { color: var(--pink-hot); }
+  .cart-count {
+    position: absolute; top: -2px; right: -2px;
+    background: var(--pink-hot); color: var(--white);
+    border-radius: 50%; width: 16px; height: 16px;
+    font-size: .65rem; display: flex; align-items: center; justify-content: center;
+    font-weight: 600;
+  }
+  .nav-cta {
+    background: var(--pink-hot); color: var(--white); border: none;
+    padding: .55rem 1.4rem; border-radius: 50px; font-size: .8rem;
+    font-family: 'DM Sans', sans-serif; font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase; cursor: none;
+    transition: background .2s, transform .2s, box-shadow .2s;
+  }
+  .nav-cta:hover {
+    background: var(--pink-mid);
+    box-shadow: 0 0 24px var(--glow);
+    transform: translateY(-1px);
+  }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: none; background: none; border: none; }
+  .hamburger span { width: 22px; height: 1.5px; background: var(--white); transition: all .3s; }
+
+  /* ── SEARCH OVERLAY ── */
+  .search-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.92);
+    z-index: 2000; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity .3s;
+    backdrop-filter: blur(20px);
+  }
+  .search-overlay.open { opacity: 1; pointer-events: all; }
+  .search-box {
+    width: 600px; max-width: 90vw;
+    border-bottom: 1px solid var(--pink-hot);
+    display: flex; align-items: center; gap: 1rem;
+    padding-bottom: .8rem;
+  }
+  .search-box input {
+    flex: 1; background: none; border: none; color: var(--white);
+    font-size: 1.8rem; font-family: 'Cormorant Garamond', serif;
+    outline: none; font-style: italic;
+  }
+  .search-box input::placeholder { color: rgba(255,255,255,.3); }
+  .search-close {
+    background: none; border: none; color: var(--white); font-size: 1.4rem; cursor: none;
+  }
+
+  /* ── CART DRAWER ── */
+  .cart-drawer {
+    position: fixed; top: 0; right: -420px; width: 420px; max-width: 95vw;
+    height: 100vh; background: var(--deep); z-index: 1500;
+    padding: 2rem; border-left: 1px solid var(--border);
+    transition: right .4s cubic-bezier(.16,1,.3,1);
+    display: flex; flex-direction: column;
+  }
+  .cart-drawer.open { right: 0; }
+  .cart-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.5);
+    z-index: 1400; opacity: 0; pointer-events: none; transition: opacity .3s;
+  }
+  .cart-overlay.open { opacity: 1; pointer-events: all; }
+  .cart-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 1.5rem; border-bottom: 1px solid var(--border);
+  }
+  .cart-title {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700;
+  }
+  .cart-close { background: none; border: none; color: var(--white); font-size: 1.2rem; cursor: none; }
+  .cart-items { flex: 1; overflow-y: auto; padding: 1.5rem 0; }
+  .cart-empty {
+    text-align: center; color: var(--text-muted);
+    font-style: italic; padding: 3rem 0;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.1rem;
+  }
+  .cart-item {
+    display: flex; gap: 1rem; padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .cart-item-img {
+    width: 70px; height: 70px; border-radius: 8px; object-fit: cover;
+    background: linear-gradient(135deg, var(--pink-hot), #8B0040);
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+  }
+  .cart-item-info { flex: 1; }
+  .cart-item-name { font-size: .9rem; font-weight: 500; margin-bottom: .25rem; }
+  .cart-item-price { color: var(--pink-hot); font-size: .85rem; font-weight: 600; }
+  .cart-item-qty {
+    display: flex; align-items: center; gap: .5rem; margin-top: .5rem;
+  }
+  .qty-btn {
+    width: 24px; height: 24px; border-radius: 50%;
+    border: 1px solid var(--border); background: none; color: var(--white);
+    cursor: none; font-size: .8rem; display: flex; align-items: center; justify-content: center;
+    transition: border-color .2s, background .2s;
+  }
+  .qty-btn:hover { border-color: var(--pink-hot); background: var(--pink-hot); }
+  .cart-footer { padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .cart-total {
+    display: flex; justify-content: space-between;
+    font-size: 1.1rem; font-weight: 600; margin-bottom: 1.5rem;
+  }
+  .cart-total span:last-child { color: var(--pink-hot); }
+  .btn-checkout {
+    width: 100%; padding: 1rem; background: var(--pink-hot);
+    color: var(--white); border: none; border-radius: 50px;
+    font-family: 'DM Sans', sans-serif; font-weight: 600;
+    font-size: .9rem; letter-spacing: .1em; text-transform: uppercase;
+    cursor: none; transition: background .2s, box-shadow .2s;
+  }
+  .btn-checkout:hover { background: var(--pink-mid); box-shadow: 0 0 30px var(--glow); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(255,31,122,.18) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 80% at 20% 80%, rgba(139,0,64,.15) 0%, transparent 60%),
+                var(--black);
+    padding: 6rem 3rem 3rem;
+  }
+
+  .hero-bg-orb {
+    position: absolute; border-radius: 50%; filter: blur(80px);
+    pointer-events: none; animation: orb-float 8s ease-in-out infinite;
+  }
+  .orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,31,122,.25), transparent 70%);
+    top: -10%; right: -5%;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,95,160,.2), transparent 70%);
+    bottom: 10%; left: 5%; animation-delay: -4s;
+  }
+  @keyframes orb-float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.05); }
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 600px; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: .5rem;
+    border: 1px solid rgba(255,31,122,.4); border-radius: 50px;
+    padding: .35rem 1rem; font-size: .72rem; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--pink-mid);
+    margin-bottom: 1.8rem;
+    animation: fade-up .8s ease both;
+  }
+  .hero-tag::before { content: '✦'; font-size: .6rem; color: var(--pink-hot); }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 1.05; font-weight: 900;
+    margin-bottom: 1.5rem;
+    animation: fade-up .8s .1s ease both;
+  }
+  .hero-title em { color: var(--pink-hot); font-style: italic; }
+  .hero-title .outline-text {
+    -webkit-text-stroke: 1px rgba(255,255,255,.4);
+    color: transparent;
+  }
+
+  .hero-sub {
+    font-size: 1.05rem; color: rgba(255,255,255,.65);
+    line-height: 1.7; max-width: 440px;
+    margin-bottom: 2.5rem; font-weight: 300;
+    animation: fade-up .8s .2s ease both;
+  }
+
+  .hero-btns {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fade-up .8s .3s ease both;
+  }
+  .btn-primary {
+    background: var(--pink-hot); color: var(--white); border: none;
+    padding: 1rem 2.2rem; border-radius: 50px; font-size: .88rem;
+    font-family: 'DM Sans', sans-serif; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; cursor: none;
+    transition: all .25s; text-decoration: none; display: inline-flex; align-items: center; gap: .5rem;
+    box-shadow: 0 8px 30px rgba(255,31,122,.4);
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 50px rgba(255,31,122,.55);
+    background: #ff3d8c;
+  }
+  .btn-secondary {
+    background: transparent; color: var(--white);
+    border: 1px solid rgba(255,255,255,.3);
+    padding: 1rem 2.2rem; border-radius: 50px; font-size: .88rem;
+    font-family: 'DM Sans', sans-serif; font-weight: 500;
+    letter-spacing: .1em; text-transform: uppercase; cursor: none;
+    transition: all .25s; text-decoration: none; display: inline-flex; align-items: center; gap: .5rem;
+  }
+  .btn-secondary:hover {
+    border-color: var(--pink-hot); color: var(--pink-hot);
+    transform: translateY(-3px);
+  }
+
+  .hero-stats {
+    display: flex; gap: 2.5rem; margin-top: 3.5rem;
+    animation: fade-up .8s .4s ease both;
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem; font-weight: 700; color: var(--white);
+    line-height: 1;
+  }
+  .stat-num span { color: var(--pink-hot); }
+  .stat-label { font-size: .72rem; color: var(--text-muted); letter-spacing: .1em; text-transform: uppercase; margin-top: .2rem; }
+
+  .hero-visual {
+    position: absolute; right: 0; top: 0; bottom: 0;
+    width: 52%; display: flex; align-items: center; justify-content: center;
+    z-index: 1;
+  }
+  .hero-gloss-display {
+    position: relative; width: 500px; height: 600px;
+  }
+  .gloss-circle {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(255,31,122,.5), rgba(139,0,64,.8) 60%, rgba(0,0,0,.9));
+    animation: spin-slow 20s linear infinite;
+  }
+  .gc-1 { width: 380px; height: 380px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+  .gc-2 { width: 240px; height: 240px; top: 8%; right: 5%; animation-direction: reverse; animation-duration: 15s; background: radial-gradient(circle at 35% 35%, rgba(255,95,160,.4), rgba(100,0,50,.7) 60%, rgba(0,0,0,.8)); }
+  .gc-3 { width: 130px; height: 130px; bottom: 10%; left: 8%; animation-duration: 25s; background: radial-gradient(circle at 40% 35%, rgba(255,179,207,.4), rgba(80,0,40,.7)); }
+
+  @keyframes spin-slow {
+    0% { transform: translate(-50%,-50%) rotate(0deg); }
+    100% { transform: translate(-50%,-50%) rotate(360deg); }
+  }
+
+  .gloss-tube {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-55%) rotate(-15deg);
+    font-size: 8rem; filter: drop-shadow(0 20px 60px rgba(255,31,122,.6));
+    animation: float-tube 4s ease-in-out infinite;
+    z-index: 3;
+  }
+  @keyframes float-tube { 0%,100% { transform: translate(-50%,-55%) rotate(-15deg) translateY(0); } 50% { transform: translate(-50%,-55%) rotate(-15deg) translateY(-20px); } }
+
+  .gloss-sparkles { position: absolute; inset: 0; z-index: 4; }
+  .sparkle {
+    position: absolute; color: var(--pink-soft);
+    animation: twinkle 2s ease-in-out infinite;
+    font-size: .7rem;
+  }
+  @keyframes twinkle { 0%,100% { opacity: 0; transform: scale(.5); } 50% { opacity: 1; transform: scale(1); } }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-section {
+    padding: 1.2rem 0;
+    background: var(--pink-hot); overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,.1);
+    border-bottom: 1px solid rgba(255,255,255,.1);
+  }
+  .marquee-track {
+    display: flex; width: max-content;
+    animation: marquee 25s linear infinite;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .marquee-item {
+    white-space: nowrap; padding: 0 2.5rem;
+    font-size: .75rem; font-weight: 600; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--white);
+    display: flex; align-items: center; gap: 2.5rem;
+  }
+  .marquee-item::after { content: '✦'; color: rgba(255,255,255,.5); }
+
+  /* ── SECTION COMMONS ── */
+  section { padding: 7rem 3rem; }
+  .section-tag {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--pink-hot); margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  .section-tag::before { content: ''; width: 24px; height: 1px; background: var(--pink-hot); }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900; line-height: 1.15; margin-bottom: 1.2rem;
+  }
+  .section-title em { color: var(--pink-hot); font-style: italic; }
+  .section-sub {
+    color: var(--text-muted); font-size: 1rem; line-height: 1.7;
+    max-width: 480px; font-weight: 300;
+  }
+  .section-header { margin-bottom: 4rem; }
+  .section-header.center { text-align: center; }
+  .section-header.center .section-tag { justify-content: center; }
+  .section-header.center .section-sub { margin: 0 auto; }
+  .section-header.center .section-tag::before { display: none; }
+
+  /* ── FEATURED PRODUCTS ── */
+  .products-section { background: var(--deep); }
+  .products-controls {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;
+  }
+  .filter-tabs { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .filter-tab {
+    padding: .5rem 1.3rem; border-radius: 50px; font-size: .8rem;
+    font-weight: 500; letter-spacing: .05em; cursor: none;
+    border: 1px solid var(--border); background: transparent; color: var(--text-muted);
+    transition: all .2s; font-family: 'DM Sans', sans-serif;
+  }
+  .filter-tab.active, .filter-tab:hover {
+    background: var(--pink-hot); border-color: var(--pink-hot); color: var(--white);
+  }
+  .sort-select {
+    background: var(--card); border: 1px solid var(--border); color: var(--white);
+    padding: .5rem 1rem; border-radius: 8px; font-size: .8rem;
+    font-family: 'DM Sans', sans-serif; cursor: none; outline: none;
+  }
+
+  .products-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  .product-card {
+    background: var(--card); border-radius: 20px;
+    border: 1px solid var(--border); overflow: hidden;
+    transition: transform .35s, box-shadow .35s;
+    position: relative; cursor: none;
+  }
+  .product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 30px 80px rgba(255,31,122,.2);
+    border-color: rgba(255,31,122,.35);
+  }
+  .product-image {
+    height: 240px; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .product-emoji {
+    font-size: 5rem; transition: transform .4s;
+    filter: drop-shadow(0 10px 30px rgba(255,31,122,.5));
+  }
+  .product-card:hover .product-emoji { transform: scale(1.15) rotate(-5deg); }
+  .product-shade-bg {
+    position: absolute; inset: 0;
+    transition: opacity .3s;
+  }
+
+  .product-badges {
+    position: absolute; top: 1rem; left: 1rem;
+    display: flex; gap: .4rem; flex-wrap: wrap;
+  }
+  .badge {
+    padding: .25rem .7rem; border-radius: 50px; font-size: .65rem;
+    font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  }
+  .badge-new { background: var(--pink-hot); color: var(--white); }
+  .badge-hot { background: #FF6B1A; color: var(--white); }
+  .badge-sale { background: var(--gold); color: var(--black); }
+  .badge-sold { background: rgba(255,255,255,.15); color: var(--white); }
+
+  .product-wish {
+    position: absolute; top: 1rem; right: 1rem;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(0,0,0,.5); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: none; font-size: .85rem; transition: all .2s;
+    backdrop-filter: blur(8px);
+  }
+  .product-wish:hover, .product-wish.wishlisted {
+    background: var(--pink-hot); border-color: var(--pink-hot);
+  }
+
+  .product-info { padding: 1.4rem; }
+  .product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; font-weight: 600; margin-bottom: .3rem;
+  }
+  .product-shade { font-size: .78rem; color: var(--text-muted); margin-bottom: .8rem; }
+  .product-stars { display: flex; align-items: center; gap: .4rem; margin-bottom: .9rem; }
+  .stars { color: var(--pink-hot); font-size: .85rem; }
+  .review-count { font-size: .75rem; color: var(--text-muted); }
+  .product-footer { display: flex; align-items: center; justify-content: space-between; }
+  .product-price { font-size: 1.15rem; font-weight: 700; color: var(--white); }
+  .product-price .old-price {
+    text-decoration: line-through; color: var(--text-muted);
+    font-size: .85rem; font-weight: 400; margin-right: .5rem;
+  }
+  .btn-add {
+    background: var(--pink-hot); color: var(--white); border: none;
+    padding: .55rem 1.2rem; border-radius: 50px; font-size: .78rem;
+    font-family: 'DM Sans', sans-serif; font-weight: 600;
+    cursor: none; transition: all .2s; letter-spacing: .05em;
+  }
+  .btn-add:hover { background: var(--pink-mid); box-shadow: 0 0 20px var(--glow); transform: scale(1.04); }
+
+  .shade-dots { display: flex; gap: .4rem; margin-bottom: .9rem; }
+  .shade-dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid transparent; cursor: none;
+    transition: border-color .2s, transform .2s;
+  }
+  .shade-dot:hover, .shade-dot.active { border-color: var(--white); transform: scale(1.2); }
+
+  /* ── ABOUT ── */
+  .about-section {
+    background: var(--black);
+    position: relative; overflow: hidden;
+  }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+    align-items: center;
+  }
+  .about-visual {
+    position: relative; height: 560px;
+  }
+  .about-card {
+    position: absolute; border-radius: 20px; overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .about-card-1 {
+    width: 280px; height: 380px; top: 0; left: 0;
+    background: linear-gradient(160deg, rgba(255,31,122,.3) 0%, rgba(139,0,64,.5) 50%, rgba(10,10,10,.9) 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 6rem; filter: drop-shadow(0 20px 60px rgba(255,31,122,.4));
+  }
+  .about-card-2 {
+    width: 200px; height: 260px; bottom: 0; right: 40px;
+    background: linear-gradient(160deg, rgba(255,95,160,.25), rgba(100,0,50,.5) 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem;
+  }
+  .about-badge-float {
+    position: absolute; top: 50%; right: 0;
+    transform: translateY(-50%);
+    background: var(--pink-hot); border-radius: 16px;
+    padding: 1.2rem 1.5rem; text-align: center;
+    box-shadow: 0 20px 60px rgba(255,31,122,.5);
+  }
+  .about-badge-float .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem; font-weight: 700; line-height: 1; display: block;
+  }
+  .about-badge-float .lbl {
+    font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; opacity: .85;
+  }
+
+  .about-content .section-sub { max-width: 100%; }
+  .about-pillars {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2.5rem;
+  }
+  .pillar {
+    padding: 1.2rem; border: 1px solid var(--border); border-radius: 14px;
+    transition: border-color .2s, background .2s;
+  }
+  .pillar:hover { border-color: rgba(255,31,122,.5); background: rgba(255,31,122,.04); }
+  .pillar-icon { font-size: 1.5rem; margin-bottom: .5rem; }
+  .pillar-name { font-size: .9rem; font-weight: 600; margin-bottom: .3rem; }
+  .pillar-desc { font-size: .8rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* ── BESTSELLERS ── */
+  .bestsellers-section {
+    background: linear-gradient(160deg, rgba(255,31,122,.06) 0%, var(--deep) 50%, var(--black) 100%);
+    position: relative; overflow: hidden;
+  }
+  .bestsellers-section::before {
+    content: 'BESTSELLERS';
+    position: absolute; font-family: 'Playfair Display', serif;
+    font-size: 12rem; font-weight: 900; color: rgba(255,31,122,.04);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+    pointer-events: none; white-space: nowrap; letter-spacing: .1em;
+  }
+  .bestsellers-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr;
+    gap: 1.5rem; position: relative; z-index: 1;
+  }
+  .bs-hero-card {
+    background: linear-gradient(160deg, rgba(255,31,122,.2), rgba(139,0,64,.4) 50%, rgba(0,0,0,.9));
+    border: 1px solid rgba(255,31,122,.3); border-radius: 24px;
+    padding: 3rem 2.5rem; display: flex; flex-direction: column;
+    justify-content: flex-end; position: relative; overflow: hidden;
+    min-height: 480px; cursor: none;
+    transition: box-shadow .3s, transform .3s;
+  }
+  .bs-hero-card:hover {
+    box-shadow: 0 30px 100px rgba(255,31,122,.3);
+    transform: translateY(-5px);
+  }
+  .bs-hero-emoji {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-60%); font-size: 8rem;
+    filter: drop-shadow(0 20px 40px rgba(255,31,122,.6));
+    animation: float-tube 5s ease-in-out infinite;
+  }
+  .bs-rank {
+    position: absolute; top: 1.5rem; left: 1.5rem;
+    background: var(--pink-hot); color: var(--white);
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .8rem; font-weight: 700;
+  }
+  .bs-card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; font-weight: 700; margin-bottom: .4rem;
+  }
+  .bs-card-shade { color: var(--pink-soft); font-size: .85rem; margin-bottom: 1rem; }
+  .bs-card-price { font-size: 1.3rem; font-weight: 700; color: var(--white); }
+  .bs-side-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 24px;
+    padding: 2rem 1.5rem; display: flex; flex-direction: column;
+    justify-content: space-between; cursor: none;
+    transition: all .3s; position: relative; overflow: hidden;
+  }
+  .bs-side-card:hover {
+    border-color: rgba(255,31,122,.4);
+    box-shadow: 0 20px 60px rgba(255,31,122,.15);
+    transform: translateY(-5px);
+  }
+  .bs-side-emoji { font-size: 4rem; margin-bottom: 1rem; display: block; text-align: center; }
+  .bs-tag {
+    font-size: .68rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--pink-hot); font-weight: 600; margin-bottom: .5rem;
+  }
+  .bs-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: .3rem; }
+  .bs-shade { font-size: .78rem; color: var(--text-muted); margin-bottom: .8rem; }
+  .bs-footer { display: flex; justify-content: space-between; align-items: center; margin-top: .5rem; }
+  .bs-price { font-size: 1rem; font-weight: 700; color: var(--white); }
+  .btn-bs {
+    background: var(--pink-hot); color: var(--white); border: none;
+    padding: .5rem 1rem; border-radius: 50px; font-size: .75rem;
+    font-family: 'DM Sans', sans-serif; font-weight: 600;
+    cursor: none; transition: all .2s;
+  }
+  .btn-bs:hover { background: var(--pink-mid); box-shadow: 0 0 20px var(--glow); }
+
+  /* ── REVIEWS ── */
+  .reviews-section { background: var(--deep); }
+  .reviews-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .review-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+    padding: 2rem; transition: all .3s; position: relative;
+  }
+  .review-card:hover {
+    border-color: rgba(255,31,122,.35);
+    box-shadow: 0 20px 60px rgba(255,31,122,.1);
+    transform: translateY(-5px);
+  }
+  .review-quote {
+    font-size: 3rem; color: var(--pink-hot); line-height: 1;
+    font-family: 'Cormorant Garamond', serif; margin-bottom: -.3rem;
+  }
+  .review-text {
+    font-size: .92rem; line-height: 1.75; color: rgba(255,255,255,.8);
+    margin: .8rem 0 1.5rem; font-style: italic;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.05rem;
+  }
+  .review-author { display: flex; align-items: center; gap: .8rem; }
+  .review-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink-hot), #8B0040);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .author-name { font-weight: 600; font-size: .9rem; }
+  .author-tag { font-size: .75rem; color: var(--pink-mid); }
+  .review-stars { margin-left: auto; color: var(--pink-hot); font-size: .9rem; }
+  .review-product-ref {
+    margin-top: 1.2rem; padding-top: 1.2rem;
+    border-top: 1px solid var(--border);
+    font-size: .78rem; color: var(--text-muted);
+    display: flex; align-items: center; gap: .4rem;
+  }
+
+  /* ── GALLERY ── */
+  .gallery-section { background: var(--black); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 200px);
+    gap: .75rem;
+  }
+  .gallery-item {
+    border-radius: 16px; overflow: hidden; position: relative; cursor: none;
+    background: var(--card); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    transition: all .3s;
+  }
+  .gallery-item:nth-child(1) { grid-column: 1 / 3; grid-row: 1; }
+  .gallery-item:nth-child(4) { grid-column: 4; grid-row: 1 / 3; }
+  .gallery-item:nth-child(5) { grid-column: 1; grid-row: 2; }
+
+  .gallery-item:hover { transform: scale(1.02); z-index: 2; box-shadow: 0 20px 60px rgba(255,31,122,.3); }
+  .gallery-emoji { font-size: 3.5rem; filter: drop-shadow(0 10px 20px rgba(0,0,0,.5)); }
+  .gallery-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(255,31,122,.7), transparent 50%);
+    opacity: 0; transition: opacity .3s;
+    display: flex; align-items: flex-end; padding: 1rem;
+  }
+  .gallery-item:hover .gallery-overlay { opacity: 1; }
+  .gallery-ig-tag { font-size: .78rem; color: var(--white); font-weight: 500; }
+  .gallery-item-bg {
+    position: absolute; inset: 0;
+    opacity: .3;
+  }
+
+  /* ── NEWSLETTER ── */
+  .newsletter-section {
+    background: linear-gradient(135deg, #1a0010 0%, #0a0a0a 40%, #1a0010 100%);
+    position: relative; overflow: hidden; text-align: center;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .newsletter-section::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(255,31,122,.12), transparent);
+    pointer-events: none;
+  }
+  .newsletter-emoji { font-size: 3.5rem; margin-bottom: 1.5rem; display: block; }
+  .newsletter-section .section-sub { margin: 0 auto 2.5rem; }
+  .newsletter-form {
+    display: flex; max-width: 480px; margin: 0 auto;
+    gap: .5rem;
+  }
+  .newsletter-input {
+    flex: 1; background: rgba(255,255,255,.07); border: 1px solid var(--border);
+    color: var(--white); padding: .9rem 1.4rem; border-radius: 50px;
+    font-size: .9rem; font-family: 'DM Sans', sans-serif; outline: none;
+    transition: border-color .2s, background .2s;
+  }
+  .newsletter-input:focus {
+    border-color: rgba(255,31,122,.6); background: rgba(255,31,122,.05);
+  }
+  .newsletter-input::placeholder { color: rgba(255,255,255,.35); }
+  .btn-subscribe {
+    background: var(--pink-hot); color: var(--white); border: none;
+    padding: .9rem 1.8rem; border-radius: 50px; font-size: .85rem;
+    font-family: 'DM Sans', sans-serif; font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase; cursor: none;
+    white-space: nowrap; transition: all .2s;
+  }
+  .btn-subscribe:hover { background: var(--pink-mid); box-shadow: 0 0 30px var(--glow); }
+  .newsletter-promise {
+    margin-top: 1rem; font-size: .78rem; color: var(--text-muted);
+    display: flex; align-items: center; gap: .4rem; justify-content: center;
+  }
+  .newsletter-promise::before { content: '🔒'; font-size: .8rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--deep); border-top: 1px solid var(--border);
+    padding: 5rem 3rem 2rem;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem; margin-bottom: 4rem;
+  }
+  .footer-brand .nav-logo { font-size: 1.9rem; display: block; margin-bottom: 1rem; }
+  .footer-brand p { font-size: .88rem; color: var(--text-muted); line-height: 1.7; max-width: 260px; }
+  .footer-socials { display: flex; gap: .7rem; margin-top: 1.5rem; }
+  .social-btn {
+    width: 38px; height: 38px; border-radius: 10px;
+    border: 1px solid var(--border); background: none; color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    cursor: none; font-size: .95rem; transition: all .2s; text-decoration: none;
+  }
+  .social-btn:hover { background: var(--pink-hot); border-color: var(--pink-hot); transform: translateY(-3px); }
+  .footer-col-title {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.1rem;
+    font-weight: 700; margin-bottom: 1.3rem; color: var(--white);
+  }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: .7rem; }
+  .footer-links a {
+    color: var(--text-muted); text-decoration: none; font-size: .88rem;
+    transition: color .2s;
+  }
+  .footer-links a:hover { color: var(--pink-hot); }
+  .footer-contact p { color: var(--text-muted); font-size: .88rem; line-height: 1.8; }
+  .footer-contact a { color: var(--pink-mid); text-decoration: none; }
+  .footer-bottom {
+    padding-top: 2rem; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-bottom p { font-size: .8rem; color: var(--text-muted); }
+  .footer-payments { display: flex; gap: .6rem; }
+  .pay-badge {
+    background: rgba(255,255,255,.07); border: 1px solid var(--border);
+    border-radius: 6px; padding: .3rem .6rem; font-size: .7rem;
+    color: var(--text-muted); letter-spacing: .05em;
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: var(--card); border: 1px solid rgba(255,31,122,.4);
+    border-radius: 50px; padding: .8rem 1.8rem;
+    font-size: .88rem; font-weight: 500; z-index: 3000;
+    display: flex; align-items: center; gap: .7rem;
+    transition: transform .4s cubic-bezier(.16,1,.3,1), opacity .4s;
+    opacity: 0; box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    backdrop-filter: blur(20px);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+  /* ── MOBILE MENU ── */
+  .mobile-menu {
+    position: fixed; inset: 0; background: rgba(0,0,0,.97); z-index: 1200;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 2rem; transform: translateY(-100%); transition: transform .5s cubic-bezier(.16,1,.3,1);
+  }
+  .mobile-menu.open { transform: translateY(0); }
+  .mobile-menu a {
+    font-family: 'Playfair Display', serif; font-size: 2rem;
+    color: var(--white); text-decoration: none; transition: color .2s;
+  }
+  .mobile-menu a:hover { color: var(--pink-hot); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    nav { padding: 1rem 2rem; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    section { padding: 5rem 2rem; }
+    .hero { padding: 7rem 2rem 3rem; }
+    .hero-visual { display: none; }
+    .hero-content { max-width: 100%; }
+    .about-grid { grid-template-columns: 1fr; }
+    .about-visual { height: 300px; }
+    .bestsellers-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .gallery-grid { grid-template-columns: repeat(2,1fr); grid-template-rows: repeat(3,160px); }
+    .gallery-item:nth-child(1), .gallery-item:nth-child(4) { grid-column: auto; grid-row: auto; }
+    .gallery-item:nth-child(5) { grid-column: auto; grid-row: auto; }
+  }
+  @media (max-width: 640px) {
+    nav { padding: 1rem 1.2rem; }
+    section { padding: 4rem 1.2rem; }
+    .hero { padding: 6rem 1.2rem 3rem; }
+    .hero-title { font-size: 2.6rem; }
+    .hero-btns { flex-direction: column; }
+    .hero-stats { gap: 1.5rem; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .bestsellers-grid { grid-template-columns: 1fr; }
+    .reviews-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .newsletter-form { flex-direction: column; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    .gallery-grid { grid-template-columns: repeat(2,1fr); grid-template-rows: auto; }
+    .gallery-item:nth-child(1) { grid-column: 1 / 3; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-box">
+    <input type="text" placeholder="Search shades, collections…" id="searchInput">
+    <button class="search-close" onclick="toggleSearch()">✕</button>
+  </div>
+</div>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<!-- CART DRAWER -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <div class="cart-title">Your Bag <span id="cartCountBig" style="color:var(--pink-hot)"></span></div>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty" id="cartEmpty">Your bag is empty.<br>Add something gorgeous ✨</div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total"><span>Total</span><span id="cartTotal">$0.00</span></div>
+    <button class="btn-checkout" onclick="showToast('🔐 Redirecting to secure checkout…')">Secure Checkout →</button>
+  </div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#products" onclick="closeMobile()">Products</a>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#bestsellers" onclick="closeMobile()">Best Sellers</a>
+  <a href="#reviews" onclick="closeMobile()">Reviews</a>
+  <a href="#gallery" onclick="closeMobile()">Gallery</a>
+  <a href="#newsletter" onclick="closeMobile()">Newsletter</a>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Bena<span>.</span>Beauties</a>
+  <ul class="nav-links">
+    <li><a href="#products">Products</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#bestsellers">Best Sellers</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-icon" onclick="toggleSearch()" title="Search">🔍</button>
+    <button class="nav-icon" onclick="toggleCart()" title="Cart" style="position:relative">
+      🛍️ <span class="cart-count" id="navCartCount" style="display:none">0</span>
+    </button>
+    <button class="nav-cta" onclick="document.getElementById('newsletter').scrollIntoView({behavior:'smooth'})">Join Club</button>
+    <button class="hamburger" id="hamburger" onclick="toggleMobile()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-bg-orb orb-1"></div>
+  <div class="hero-bg-orb orb-2"></div>
+  <div class="hero-content">
+    <div class="hero-tag"> Our 2026 Collection</div>
+    <h1 class="hero-title">
+      Shine<br>
+      <em>Boldly</em> with<br>
+      <span class="outline-text">Bena Beauties</span>
+    </h1>
+    <p class="hero-sub">
+      Luxurious lip glosses that celebrate your confidence, beauty, and unapologetic self-expression. Because your lips deserve the spotlight.
+    </p>
+    <div class="hero-btns">
+      <a href="#products" class="btn-primary">✨ Shop Now</a>
+      <a href="#bestsellers" class="btn-secondary">💄 Explore Shades</a>
+    </div>
+
+  </div>
+  <div class="hero-visual">
+    <div class="hero-gloss-display">
+      <div class="gloss-circle gc-1"></div>
+      <div class="gloss-circle gc-2"></div>
+      <div class="gloss-circle gc-3"></div>
+      <div class="gloss-tube">💄</div>
+      <div class="gloss-sparkles" id="sparklesContainer"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+   
+    <span class="marquee-item">New Shades Just Dropped</span>
+    
+    <span class="marquee-item">Long-Lasting Formula</span>
+    <span class="marquee-item">Glossy Finish Guaranteed</span>
+
+    <span class="marquee-item">New Shades Just Dropped</span>
+    
+    <span class="marquee-item">Long-Lasting Formula</span>
+    <span class="marquee-item">Glossy Finish Guaranteed</span>
+   
+  </div>
+</div>
+
+<!-- ── FEATURED PRODUCTS ── -->
+<section class="products-section" id="products">
+  <div class="products-controls reveal">
+    <div>
+      <div class="section-tag">Collections</div>
+      <h2 class="section-title">Featured <em>Products</em></h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="filterProducts('all',this)">All</button>
+        <button class="filter-tab" onclick="filterProducts('glossy',this)">Glossy</button>
+        <button class="filter-tab" onclick="filterProducts('matte',this)">Matte</button>
+        <button class="filter-tab" onclick="filterProducts('tinted',this)">Tinted</button>
+        <button class="filter-tab" onclick="filterProducts('shimmer',this)">Shimmer</button>
+      </div>
+      <select class="sort-select" onchange="sortProducts(this.value)">
+        <option value="featured">Featured</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="rating">Top Rated</option>
+      </select>
+    </div>
+  </div>
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="about-section" id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal-left">
+      <div class="about-card about-card-1">💋</div>
+      <div class="about-card about-card-2">✨</div>
+      <div class="about-badge-float">
+        <span class="num">2026</span>
+        <span class="lbl">Est. Since</span>
+      </div>
+    </div>
+    <div class="about-content reveal-right">
+      <div class="section-tag">Our Story</div>
+      <h2 class="section-title">Born from <em>Passion</em>,<br>Built for Beauty</h2>
+      <p class="section-sub">
+        Bena Beauties was founded on one powerful belief: every woman deserves to feel glamorous, confident, and unapologetically herself. Our luxury lip glosses are crafted with premium ingredients, bold pigments, and a glossy finish that turns heads everywhere you go.
+      </p>
+      <p class="section-sub" style="margin-top:1rem">
+        From boardrooms to brunches, our shades are designed to complement every mood, every skin tone, and every moment. We're not just a beauty brand — we're a movement.
+      </p>
+      <div class="about-pillars">
+     
+        <div class="pillar">
+          <div class="pillar-icon">💎</div>
+          <div class="pillar-name">Premium Quality</div>
+          <div class="pillar-desc">Luxurious finish that lasts all day long.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">🎨</div>
+          <div class="pillar-name">50+ Shades</div>
+          <div class="pillar-desc">Colors for every skin tone, every vibe.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">💝</div>
+          <div class="pillar-name">Made with Love</div>
+          <div class="pillar-desc">Every shade handpicked with intention.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BESTSELLERS ── -->
+<section class="bestsellers-section" id="bestsellers">
+  <div class="section-header center reveal">
+    <div class="section-tag">Fan Favorites</div>
+    <h2 class="section-title">Best <em>Sellers</em></h2>
+    <p class="section-sub">The glosses our community can't stop talking about — and can't stop wearing.</p>
+  </div>
+  <div class="bestsellers-grid reveal" id="bestsellersGrid"></div>
+</section>
+
+<!-- ── REVIEWS ── -->
+<section class="reviews-section" id="reviews">
+  <div class="section-header center reveal">
+    <div class="section-tag">Real Talk</div>
+    <h2 class="section-title">Loved by <em>Beauties</em></h2>
+    <p class="section-sub">Don't take our word for it — hear from our gorgeous community.</p>
+  </div>
+  <div class="reviews-grid" id="reviewsGrid"></div>
+</section>
+
+<!-- ── GALLERY ── -->
+<section class="gallery-section" id="gallery">
+  <div class="section-header reveal">
+    <div class="section-tag">@BenaBeauties</div>
+    <h2 class="section-title">Beauty <em>Moments</em></h2>
+    <p class="section-sub">Follow us for daily gloss inspo, tutorials, and behind-the-scenes glam.</p>
+  </div>
+  <div class="gallery-grid reveal" id="galleryGrid"></div>
+  <div style="text-align:center;margin-top:2.5rem">
+   <a href="https://www.instagram.com/shopbenabeauty/" class="btn-secondary" target="_blank" rel="noopener noreferrer">Follow on Instagram</a>
+  </div>
+</section>
+
+<!-- ── NEWSLETTER ── -->
+<section class="newsletter-section" id="newsletter">
+  <span class="newsletter-emoji">💌</span>
+  <div class="section-tag" style="justify-content:center;margin-bottom:.5rem"><span style="margin:0">Join the Gloss Club</span></div>
+  <h2 class="section-title" style="text-align:center;margin-bottom:1rem">Be the First to <em>Shine</em></h2>
+ 
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">Bena<span style="color:var(--pink-hot)">.</span>Beauties</a>
+      <p>Luxury lip glosses crafted for the bold, the beautiful, and the unapologetically glamorous. Shine on your terms.</p>
+
+    </div>
+    <div>
+      <div class="footer-col-title">Shop</div>
+      <ul class="footer-links">
+        <li><a href="#products" onclick="event.preventDefault();document.getElementById('products').scrollIntoView({behavior:'smooth'})">All Products</a></li>
+        <li><a href="#bestsellers" onclick="event.preventDefault();document.getElementById('bestsellers').scrollIntoView({behavior:'smooth'})">Best Sellers</a></li>
+        <li><a href="#" onclick="showToast('New Arrivals launching soon!');return false">New Arrivals</a></li>
+        <li><a href="#" onclick="showToast('Gift Sets coming soon!');return false">Gift Sets</a></li>
+        <li><a href="#" onclick="showToast('Sale section launching soon!');return false">Sale</a></li>
+      </ul>
+    </div>
+    <div>
+    
+    <div class="footer-contact">
+      <div class="footer-col-title">Contact</div>
+      <p>
+        📍 Accra, Ghana<br>
+   
+        📱 <a href="tel:+233556040802">0556040802</a><br><br>
+      
+      </p>
+    </div>
+  </div>
+
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span id="toastMsg">Added to bag! 💄</span>
+</div>
+
+<script>
+// ── DATA ──
+const products = [
+  { id:1, name:'Velvet Kiss', shade:'Rose Petal', price:18, oldPrice:null, rating:4.9, reviews:234, emoji:'💋', category:'glossy', badge:'new', colors:['#FF1F7A','#C2185B','#880E4F'], bg:'linear-gradient(135deg,rgba(255,31,122,.3),rgba(139,0,64,.6))' },
+  { id:2, name:'Cherry Bomb', shade:'Crimson Dream', price:16, oldPrice:20, rating:4.8, reviews:189, emoji:'🍒', category:'tinted', badge:'sale', colors:['#D32F2F','#B71C1C','#FF5252'], bg:'linear-gradient(135deg,rgba(211,47,47,.3),rgba(183,28,28,.6))' },
+
+];
+
+const bestsellers = [
+  { rank:1, name:'Pink Obsession', shade:'Hot Fuchsia — Our #1 bestseller', price:'$19', emoji:'🌸', tag:'#1 Bestseller', bg:'linear-gradient(160deg,rgba(233,30,140,.3),rgba(255,64,129,.5) 50%,rgba(0,0,0,.9))', id:3 },
+  { rank:2, name:'Velvet Kiss', shade:'Rose Petal', price:'$18', emoji:'💋', tag:'Fan Favourite', id:1 },
+  { rank:3, name:'Glam Goddess', shade:'Golden Pink', price:'$22', emoji:'👑', tag:'Trending Now', id:5 },
+];
+
+const reviews = [
+  { text:"I've tried so many lip glosses but nothing compares to Bena Beauties. The formula is so moisturizing and the color payoff is absolutely stunning. My coworkers ask me about it every single day!", author:"Esinam B.", tag:"Verified Buyer ✓", avatar:'👩🏾', stars:5, product:'Pink Obsession' },
+  { text:"The packaging alone is so luxurious — then you put it on and it's even better. I ordered 3 shades and I'm already going back for more. Cherry Bomb is literally my everyday shade now.", author:"Abigail OA.", tag:"Verified Buyer ✓", avatar:'👩🏿', stars:5, product:'Cherry Bomb' },
+  { text:"Obsessed doesn't even begin to describe it. Velvet Kiss stayed on through brunch, a walk, and drinks. This is the real deal. Bena Beauties is my new holy grail.", author:"Kezia OA.", tag:"Verified Buyer ✓", avatar:'👩🏽', stars:5, product:'Velvet Kiss' },
+  
+];
+
+const galleryItems = [
+  { emoji:'💋', bg:'linear-gradient(160deg,rgba(255,31,122,.4),rgba(139,0,64,.7))', tag:'#BenaBeauties' },
+  { emoji:'🌸', bg:'linear-gradient(160deg,rgba(233,30,140,.3),rgba(0,0,0,.8))', tag:'#GlossLife' },
+  { emoji:'✨', bg:'linear-gradient(160deg,rgba(255,215,0,.2),rgba(255,31,122,.5))', tag:'#ShineOn' },
+  { emoji:'💄', bg:'linear-gradient(160deg,rgba(255,31,122,.3),rgba(139,0,64,.6))', tag:'#LipGloss' },
+  { emoji:'👑', bg:'linear-gradient(160deg,rgba(255,107,26,.2),rgba(0,0,0,.8))', tag:'#GlamLife' },
+  { emoji:'💝', bg:'linear-gradient(160deg,rgba(123,31,162,.3),rgba(0,0,0,.8))', tag:'#BeautyBabe' },
+];
+
+// ── STATE ──
+let cart = [];
+let wishlist = [];
+let activeFilter = 'all';
+
+// ── RENDER PRODUCTS ──
+function renderProducts(items) {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = items.map(p => `
+    <div class="product-card" data-category="${p.category}" data-id="${p.id}">
+      <div class="product-image" style="background:${p.bg}">
+        <div class="product-emoji">${p.emoji}</div>
+        <div class="product-badges">
+          ${p.badge ? `<span class="badge badge-${p.badge}">${p.badge.toUpperCase()}</span>` : ''}
+        </div>
+        <button class="product-wish ${wishlist.includes(p.id)?'wishlisted':''}" onclick="toggleWish(${p.id},this)" title="Wishlist">
+          ${wishlist.includes(p.id)?'❤️':'🤍'}
+        </button>
+      </div>
+      <div class="product-info">
+        <div class="product-name">${p.name}</div>
+        <div class="product-shade">${p.shade}</div>
+        <div class="shade-dots">${p.colors.map((c,i)=>`<div class="shade-dot ${i===0?'active':''}" style="background:${c}" onclick="this.parentElement.querySelectorAll('.shade-dot').forEach(d=>d.classList.remove('active'));this.classList.add('active')"></div>`).join('')}</div>
+        <div class="product-stars">
+          <div class="stars">${'★'.repeat(Math.round(p.rating))}${'☆'.repeat(5-Math.round(p.rating))}</div>
+          <span style="font-size:.85rem;font-weight:600">${p.rating}</span>
+          <span class="review-count">(${p.reviews})</span>
+        </div>
+        <div class="product-footer">
+          <div class="product-price">
+            ${p.oldPrice?`<span class="old-price">$${p.oldPrice}</span>`:''}$${p.price}
+          </div>
+          <button class="btn-add" onclick="addToCart(${p.id})">+ Add</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterProducts(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = cat === 'all' ? products : products.filter(p=>p.category===cat);
+  renderProducts(filtered);
+}
+
+function sortProducts(val) {
+  const list = activeFilter === 'all' ? [...products] : products.filter(p=>p.category===activeFilter);
+  if(val==='price-low') list.sort((a,b)=>a.price-b.price);
+  else if(val==='price-high') list.sort((a,b)=>b.price-a.price);
+  else if(val==='rating') list.sort((a,b)=>b.rating-a.rating);
+  renderProducts(list);
+}
+
+// ── BESTSELLERS ──
+function renderBestsellers() {
+  const grid = document.getElementById('bestsellersGrid');
+  const [hero, ...rest] = bestsellers;
+  grid.innerHTML = `
+    <div class="bs-hero-card" style="background:${hero.bg}" onclick="addToCart(${hero.id})">
+      <div class="bs-rank">${hero.rank}</div>
+      <div class="bs-hero-emoji">${hero.emoji}</div>
+      <div>
+        <div style="font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--pink-soft);margin-bottom:.4rem">${hero.tag}</div>
+        <div class="bs-card-name">${hero.name}</div>
+        <div class="bs-card-shade">${hero.shade}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="bs-card-price">${hero.price}</div>
+          <button class="btn-bs">Add to Bag</button>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;gap:1.5rem">
+      ${rest.map(b=>`
+        <div class="bs-side-card" onclick="addToCart(${b.id})">
+          <span class="bs-side-emoji">${b.emoji}</span>
+          <div>
+            <div class="bs-tag">${b.tag}</div>
+            <div class="bs-name">${b.name}</div>
+            <div class="bs-shade">${b.shade}</div>
+            <div class="bs-footer">
+              <span class="bs-price">${b.price}</span>
+              <button class="btn-bs">Add</button>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ── REVIEWS ──
+function renderReviews() {
+  document.getElementById('reviewsGrid').innerHTML = reviews.map(r=>`
+    <div class="review-card">
+      <div class="review-quote">"</div>
+      <p class="review-text">${r.text}</p>
+      <div class="review-author">
+        <div class="review-avatar">${r.avatar}</div>
+        <div>
+          <div class="author-name">${r.author}</div>
+          <div class="author-tag">${r.tag}</div>
+        </div>
+        <div class="review-stars">${'★'.repeat(r.stars)}</div>
+      </div>
+      <div class="review-product-ref">💄 ${r.product}</div>
+    </div>
+  `).join('');
+}
+
+// ── GALLERY ──
+function renderGallery() {
+  document.getElementById('galleryGrid').innerHTML = galleryItems.map(g=>`
+    <div class="gallery-item">
+      <div class="gallery-item-bg" style="background:${g.bg}"></div>
+      <div class="gallery-emoji">${g.emoji}</div>
+      <div class="gallery-overlay">
+        <span class="gallery-ig-tag">${g.tag}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── CART ──
+function addToCart(id) {
+  const product = products.find(p=>p.id===id);
+  if(!product) return;
+  const existing = cart.find(i=>i.id===id);
+  if(existing) existing.qty++;
+  else cart.push({...product, qty:1});
+  updateCart();
+  showToast(`💄 ${product.name} added to bag!`);
+}
+
+function updateCart() {
+  const total = cart.reduce((s,i)=>s+i.qty,0);
+  const countEl = document.getElementById('navCartCount');
+  const bigEl = document.getElementById('cartCountBig');
+  if(total > 0) {
+    countEl.style.display = 'flex'; countEl.textContent = total;
+    bigEl.textContent = `(${total})`;
+  } else {
+    countEl.style.display = 'none'; bigEl.textContent = '';
+  }
+  const empty = document.getElementById('cartEmpty');
+  const footer = document.getElementById('cartFooter');
+  const itemsEl = document.getElementById('cartItems');
+  if(cart.length === 0) {
+    empty.style.display = 'block'; footer.style.display = 'none';
+    itemsEl.innerHTML = `<div class="cart-empty" id="cartEmpty">Your bag is empty.<br>Add something gorgeous ✨</div>`;
+  } else {
+    footer.style.display = 'block';
+    const grandTotal = cart.reduce((s,i)=>s+(i.price*i.qty),0);
+    document.getElementById('cartTotal').textContent = `$${grandTotal.toFixed(2)}`;
+    itemsEl.innerHTML = cart.map(item=>`
+      <div class="cart-item">
+        <div class="cart-item-img">${item.emoji}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">$${(item.price*item.qty).toFixed(2)}</div>
+          <div class="cart-item-qty">
+            <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+            <span style="font-size:.85rem;font-weight:500">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(i=>i.id===id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty <= 0) cart = cart.filter(i=>i.id!==id);
+  updateCart();
+}
+
+function toggleWish(id, btn) {
+  if(wishlist.includes(id)) {
+    wishlist = wishlist.filter(w=>w!==id);
+    btn.innerHTML = '🤍'; btn.classList.remove('wishlisted');
+    showToast('💔 Removed from wishlist');
+  } else {
+    wishlist.push(id);
+    btn.innerHTML = '❤️'; btn.classList.add('wishlisted');
+    showToast('❤️ Added to wishlist!');
+  }
+}
+
+// ── UI TOGGLES ──
+function toggleCart() {
+  document.getElementById('cartDrawer').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('open');
+}
+function toggleSearch() {
+  document.getElementById('searchOverlay').classList.toggle('open');
+  if(document.getElementById('searchOverlay').classList.contains('open'))
+    setTimeout(()=>document.getElementById('searchInput').focus(),300);
+}
+function toggleMobile() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+  const ham = document.getElementById('hamburger');
+  ham.classList.toggle('open');
+}
+function closeMobile() { document.getElementById('mobileMenu').classList.remove('open'); }
+
+document.getElementById('searchInput').addEventListener('keydown', e => {
+  if(e.key==='Escape') toggleSearch();
+  if(e.key==='Enter') { showToast(`🔍 Searching "${e.target.value}"…`); toggleSearch(); }
+});
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg) {
+  clearTimeout(toastTimer);
+  document.getElementById('toastMsg').textContent = msg;
+  document.getElementById('toast').classList.add('show');
+  toastTimer = setTimeout(()=>document.getElementById('toast').classList.remove('show'), 3000);
+}
+
+// ── NEWSLETTER ──
+function subscribeNewsletter() {
+  const email = document.getElementById('emailInput').value.trim();
+  if(!email || !email.includes('@')) { showToast('⚠️ Please enter a valid email'); return; }
+  showToast(`💌 Welcome to the Gloss Club, babe! 🌸`);
+  document.getElementById('emailInput').value = '';
+}
+
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0, my=0, rx=0, ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx+'px'; cursor.style.top=my+'px'; });
+function animRing() {
+  rx += (mx-rx)*.12; ry += (my-ry)*.12;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+document.querySelectorAll('button,a,.product-card,.bs-hero-card,.bs-side-card,.gallery-item,.shade-dot').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ cursor.style.width='20px'; cursor.style.height='20px'; ring.style.width='55px'; ring.style.height='55px'; });
+  el.addEventListener('mouseleave',()=>{ cursor.style.width='12px'; cursor.style.height='12px'; ring.style.width='36px'; ring.style.height='36px'; });
+});
+
+// ── SCROLL ──
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>60);
+});
+
+// ── REVEAL ──
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold:.12 });
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>observer.observe(el));
+
+// ── SPARKLES ──
+function makeSparkle() {
+  const container = document.getElementById('sparklesContainer');
+  const s = document.createElement('div');
+  s.className='sparkle'; s.textContent='✦';
+  s.style.left=Math.random()*100+'%';
+  s.style.top=Math.random()*100+'%';
+  s.style.animationDelay=Math.random()*2+'s';
+  s.style.animationDuration=(1.5+Math.random()*2)+'s';
+  container.appendChild(s);
+  setTimeout(()=>s.remove(), 4000);
+}
+setInterval(makeSparkle, 600);
+
+// ── INIT ──
+renderProducts(products);
+renderBestsellers();
+renderReviews();
+renderGallery();
+</script>
+</body>
+</html>
